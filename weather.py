@@ -34,6 +34,7 @@ def GetData( msg, num):
 class weather():
     def __init__(self,name):
         self.cityname = name
+        self.ParseUrl()
 
 
     def ParseUrl(self):
@@ -43,6 +44,7 @@ class weather():
         '''
         self.url = "http://wthrcdn.etouch.cn/WeatherApi?city="+self.cityname   #url拼接
         #print(self.url)
+        self.UrlRequest()
 
 
     def UrlRequest(self):
@@ -61,6 +63,8 @@ class weather():
 
         except URLError as e:
             print(e)
+            exit()
+        self.DataWrite()
 
     def DataWrite(self):
         '''
@@ -71,6 +75,7 @@ class weather():
         with open("WeatherApi","wb") as f:
             f.write(self.result)
             f.close()
+            self.LoadsResult()
 
 
 
@@ -104,11 +109,8 @@ class weather():
 
 def main():
     city = input("请输入需要查询的城市\n")    #获取城市名称
-    x = weather(city)                         #类方法
-    x.ParseUrl()                              #构造url
-    x.UrlRequest()                            #访问url
-    x.DataWrite()                             #存储xml数据
-    x.LoadsResult()                           #解析数据
+    weather(city)                         #启动
+
 
 if __name__ == "__main__":
     main()
