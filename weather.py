@@ -34,7 +34,6 @@ def GetData( msg, num):
 class weather():
     def __init__(self,name):
         self.cityname = name
-        self.ParseUrl()
 
 
     def ParseUrl(self):
@@ -44,7 +43,6 @@ class weather():
         '''
         self.url = "http://wthrcdn.etouch.cn/WeatherApi?city="+self.cityname   #url拼接
         #print(self.url)
-        self.UrlRequest()
 
 
     def UrlRequest(self):
@@ -63,8 +61,6 @@ class weather():
 
         except URLError as e:
             print(e)
-            exit()
-        self.DataWrite()
 
     def DataWrite(self):
         '''
@@ -75,7 +71,6 @@ class weather():
         with open("WeatherApi","wb") as f:
             f.write(self.result)
             f.close()
-            self.LoadsResult()
 
 
 
@@ -90,27 +85,30 @@ class weather():
 
 
         for i in range(0,3):              #一共有四组信息
-            msg="城市："+GetData("city","0")+"\n"\
-                    "日期："+GetData("date",i)+"\n"\
-                    "温度："+GetData("wendu","0")+"\n"\
-                    "最高温："+GetData("high",i)+"\n"\
-                    "最低温："+GetData("low",i)+"\n"\
-                    "风向："+GetData("fengxiang",i)+"\n"\
-                    "风力："+GetData("fengli",i)+"\n"\
-                    "天气："+GetData("type",i)+"\n"
+            msg="[  城市： ]  "+GetData("city","0")+"\n"\
+                    "[  日期： ]  "+GetData("date",i)+"\n"\
+                    "[  温度： ]  "+GetData("wendu","0")+"\n"\
+                    "[ 最高温：]  "+GetData("high",i)+"\n"\
+                    "[ 最低温：]  "+GetData("low",i)+"\n"\
+                    "[  风向： ]  "+GetData("fengxiang",i)+"\n"\
+                    "[  风力： ]  "+GetData("fengli",i)+"\n"\
+                    "[  天气： ]  "+GetData("type",i)+"\n"
             print(msg)
 
         print("-----温馨提示-----\n")
         for i in range(0,10):
-            msg=GetData("name",i)+"："+GetData("value",i)+"\n"+"tips："+GetData("detail",i)+"\n"
+            msg=GetData("name",i)+"："+GetData("value",i)+"\n"+"[  tips： ]  "+GetData("detail",i)+"\n"
             print(msg)
 
 
 
 def main():
     city = input("请输入需要查询的城市\n")    #获取城市名称
-    weather(city)                         #启动
-
+    x = weather(city)                         #类方法
+    x.ParseUrl()                              #构造url
+    x.UrlRequest()                            #访问url
+    x.DataWrite()                             #存储xml数据
+    x.LoadsResult()                           #解析数据
 
 if __name__ == "__main__":
     main()
